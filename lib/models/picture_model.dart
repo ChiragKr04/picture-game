@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 PictureModel pictureModelFromJson(String str) =>
     PictureModel.fromJson(json.decode(str));
@@ -32,6 +31,10 @@ class PictureModel {
   Map<String, dynamic> toJson() => {
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
       };
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 class Result {
@@ -87,6 +90,17 @@ class Result {
         links: Links.fromJson(json["links"]),
       );
 
+  factory Result.empty() => Result(
+        id: "-1",
+        width: 0,
+        height: 0,
+        color: "",
+        description: "",
+        altDescription: "",
+        urls: Urls.empty(),
+        links: Links.empty(),
+      );
+
   Map<String, dynamic> toJson() => {
         "id": id,
         "width": width,
@@ -97,6 +111,11 @@ class Result {
         "urls": urls.toJson(),
         "links": links.toJson(),
       };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 class Links {
@@ -132,12 +151,23 @@ class Links {
         downloadLocation: json["download_location"],
       );
 
+  factory Links.empty() => Links(
+        self: "",
+        html: "",
+        download: "",
+        downloadLocation: "",
+      );
+
   Map<String, dynamic> toJson() => {
         "self": self,
         "html": html,
         "download": download,
         "download_location": downloadLocation,
       };
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 class Urls {
@@ -183,6 +213,15 @@ class Urls {
         smallS3: json["small_s3"],
       );
 
+  factory Urls.empty() => Urls(
+        raw: "",
+        full: "",
+        regular: "",
+        small: "",
+        thumb: "",
+        smallS3: "",
+      );
+
   Map<String, dynamic> toJson() => {
         "raw": raw,
         "full": full,
@@ -191,4 +230,8 @@ class Urls {
         "thumb": thumb,
         "small_s3": smallS3,
       };
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
