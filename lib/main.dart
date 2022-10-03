@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:picture_game/screens/AdminScreen/admin_screen.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,28 +16,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Picture Game',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends ConsumerWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Picture Game"),
-        centerTitle: true,
-      ),
-      body: const Text("Picture Game"),
+    return ResponsiveSizer(
+      builder: (context, _, __) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Picture Game',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const AdminScreen(),
+        );
+      },
     );
   }
 }
