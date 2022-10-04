@@ -19,10 +19,7 @@ linux/
 macos/
 windows/
 ios/
-android/app/google-services.json
-lib/firebase_options.dart
 lib/constants/twitch_api_constants.dart
-lib/constants/api_keys.dart
 
 
 # The .vscode folder contains launch configuration and tasks you configure in

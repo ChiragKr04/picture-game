@@ -13,6 +13,29 @@ class AdminScreen extends ConsumerStatefulWidget {
 
 class _AdminScreenState extends ConsumerState<AdminScreen> {
   TextEditingController controller = TextEditingController();
+
+  final successSnackBar = SnackBar(
+    behavior: SnackBarBehavior.floating,
+    content: const Text("Data added to Firebase"),
+    backgroundColor: Colors.green,
+    action: SnackBarAction(
+      textColor: Colors.black,
+      label: "Ok",
+      onPressed: () {},
+    ),
+  );
+
+  final failureSnackBar = SnackBar(
+    behavior: SnackBarBehavior.floating,
+    content: const Text("Error adding data to Firebase"),
+    backgroundColor: Colors.red,
+    action: SnackBarAction(
+      textColor: Colors.black,
+      label: "Retry",
+      onPressed: () {},
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     var picturePvdReader = ref.read(pictureDataProvider);
@@ -26,8 +49,21 @@ class _AdminScreenState extends ConsumerState<AdminScreen> {
       floatingActionButton:
           ref.watch(pictureDataProvider).selectedPictures.length == 4
               ? FloatingActionButton.extended(
-                  onPressed: () {
-                    /// TODO: Send selected picture data to firebase
+                  onPressed: () async {
+                    await picturePvdReader.sendDataToFirebase().then(
+                      (value) {
+                        if (value) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            successSnackBar,
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            failureSnackBar,
+                          );
+                        }
+                        return value;
+                      },
+                    );
                   },
                   label: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,9 +101,17 @@ class _AdminScreenState extends ConsumerState<AdminScreen> {
             },
             child: const Text("Get Images"),
           ),
-          picturePvgWatcher.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
+          ElevatedButton(
+            onPressed: () {
+              picturePvdReader.fetchFirebasePictureData();
+            },
+            child: const Text("Fetch Data"),
+          ),
+          picturePvgWatcher.isLoading || picturePvgWatcher.isSendingToFB
+              ? const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 )
               : pictureData.results.isEmpty
                   ? const Offstage()
