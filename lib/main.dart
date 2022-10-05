@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:picture_game/screens/AdminScreen/admin_screen.dart';
+import 'package:picture_game/screens/MainPage/main_page.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'firebase_options.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const AdminScreen(),
+          home: const MainPage(),
         );
       },
     );

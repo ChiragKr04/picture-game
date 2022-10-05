@@ -41,85 +41,89 @@ class _AdminScreenState extends ConsumerState<AdminScreen> {
     var picturePvdReader = ref.read(pictureDataProvider);
     var picturePvgWatcher = ref.watch(pictureDataProvider);
     var pictureData = picturePvgWatcher.pictureData;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Admin Screen"),
-        centerTitle: true,
-      ),
-      floatingActionButton:
-          ref.watch(pictureDataProvider).selectedPictures.length == 4
-              ? FloatingActionButton.extended(
-                  onPressed: () async {
-                    await picturePvdReader.sendDataToFirebase().then(
-                      (value) {
-                        if (value) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            successSnackBar,
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            failureSnackBar,
-                          );
-                        }
-                        return value;
-                      },
-                    );
-                  },
-                  label: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
-                        "Send to Firebase",
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Icon(
-                          Icons.send,
+    return Stack(
+      children: [
+        ref.watch(pictureDataProvider).selectedPictures.length == 4
+            ? Positioned(
+                bottom: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FloatingActionButton.extended(
+                    onPressed: () async {
+                      await picturePvdReader.sendDataToFirebase().then(
+                        (value) {
+                          if (value) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              successSnackBar,
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              failureSnackBar,
+                            );
+                          }
+                          return value;
+                        },
+                      );
+                    },
+                    label: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          "Send to Firebase",
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Icon(
+                            Icons.send,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              : null,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: controller,
-              decoration: const InputDecoration(
-                labelText: "Enter a word (name, place, animal or thing)",
-                border: OutlineInputBorder(),
+                ),
+              )
+            : const Offstage(),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: controller,
+                decoration: const InputDecoration(
+                  labelText: "Enter a word (name, place, animal or thing)",
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              picturePvdReader.getSearchedWordData(
-                word: controller.text.trim(),
-              );
-            },
-            child: const Text("Get Images"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              picturePvdReader.fetchFirebasePictureData();
-            },
-            child: const Text("Fetch Data"),
-          ),
-          picturePvgWatcher.isLoading || picturePvgWatcher.isSendingToFB
-              ? const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : pictureData.results.isEmpty
-                  ? const Offstage()
-                  : ImageGridView(
-                      pictureData: pictureData,
+            ElevatedButton(
+              onPressed: () {
+                picturePvdReader.getSearchedWordData(
+                  word: controller.text.trim(),
+                );
+              },
+              child: const Text("Get Images"),
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     picturePvdReader.fetchFirebasePictureData();
+            //   },
+            //   child: const Text("Fetch Data"),
+            // ),
+            picturePvgWatcher.isLoading || picturePvgWatcher.isSendingToFB
+                ? const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
-        ],
-      ),
+                  )
+                : pictureData.results.isEmpty
+                    ? const Offstage()
+                    : ImageGridView(
+                        pictureData: pictureData,
+                      ),
+          ],
+        ),
+      ],
     );
   }
 }
