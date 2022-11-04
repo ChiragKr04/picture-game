@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:picture_game/constants/constant_utility.dart';
 import 'package:picture_game/models/firebase_model.dart';
+import 'package:picture_game/providers/global_providers.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class FirebaseDBViewerScreen extends ConsumerStatefulWidget {
@@ -41,6 +42,8 @@ class _FirebaseDBViewerScreenState
             );
           },
         ).toList();
+
+        ref.read(pictureDataProvider).updateNewFirebaseDb(firebaseData);
 
         return ImageListViewBuilder(
           firebaseDBData: firebaseData,
