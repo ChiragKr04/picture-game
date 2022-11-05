@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:picture_game/providers/global_providers.dart';
 import 'package:picture_game/screens/MultiImageGameScreen/multi_image_game_viewer.dart';
+import 'package:picture_game/screens/MultiImageGameScreen/multi_image_game_word_selector.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MultiImageGameScreen extends ConsumerStatefulWidget {
@@ -34,6 +35,7 @@ class _MultiImageGameScreenState extends ConsumerState<MultiImageGameScreen> {
           ),
           SizedBox(
             height: 40.h,
+            child: const MultiImageGameWordSelector(),
           ),
         ],
       ),

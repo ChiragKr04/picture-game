@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as d;
 
 import 'package:flutter/material.dart';
 import 'package:picture_game/models/firebase_model.dart';
@@ -6,6 +7,7 @@ import 'package:picture_game/services/firebase_service.dart';
 
 class MultiImageGameProvider extends ChangeNotifier {
   FirebaseModel currentWordData = FirebaseModel.empty();
+  List<String> currentWordList = [];
 
   MultiImageGameProvider() {
     FlirebaseServiceImpl().fetchWordsData();
@@ -14,6 +16,16 @@ class MultiImageGameProvider extends ChangeNotifier {
   void generateNewWordForGame(List<FirebaseModel> allData) {
     int randomIdx = Random().nextInt(allData.length);
     currentWordData = allData[randomIdx];
-    // notifyListeners();
+    currentWordList =
+        currentWordData.word.split("").map((e) => e.toUpperCase()).toList();
+    currentWordList.shuffle();
+  }
+
+  bool checkIfSpellingCorrect(String userTypedWord) {
+    if (currentWordData.word.toLowerCase() == userTypedWord.toLowerCase()) {
+      d.log("Word spelling is correct");
+      return true;
+    }
+    return false;
   }
 }
