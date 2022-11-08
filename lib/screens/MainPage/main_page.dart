@@ -9,7 +9,7 @@ class MainPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var screenSwitcherPvdReader = ref.read(screenSwitcherProvider);
+    // var screenSwitcherPvdReader = ref.read(screenSwitcherProvider);
     var screenSwitcherPvdWatcher = ref.watch(screenSwitcherProvider);
     return Scaffold(
       appBar: AppBar(

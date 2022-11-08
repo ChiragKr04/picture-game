@@ -25,7 +25,7 @@ class _MultiImageGameWordSelectorState
   @override
   void initState() {
     super.initState();
-    currentWord = ref.read(multiImageGameProvider).currentWordList;
+    currentWord = ref.read(blurImageGameProvider).currentWordList;
   }
 
   void wordListener() {
@@ -34,7 +34,7 @@ class _MultiImageGameWordSelectorState
         return;
       }
       bool isSpellCorrect = ref
-          .read(multiImageGameProvider)
+          .read(blurImageGameProvider)
           .checkIfSpellingCorrect(wordController.text);
       log("${wordController.text} $isSpellCorrect");
       showDialog(
@@ -79,8 +79,13 @@ class _MultiImageGameWordSelectorState
             controller: wordController,
             appContext: context,
             length: currentWord.length,
-            pinTheme: PinTheme.defaults(),
-            enabled: false,
+            pinTheme: PinTheme.defaults(
+              borderWidth: 2,
+              borderRadius: BorderRadius.circular(5),
+              shape: PinCodeFieldShape.box,
+              activeColor: Colors.green,
+              disabledColor: Colors.white,
+            ),
             onChanged: (value) {},
             onCompleted: (value) {},
           ),
@@ -106,7 +111,9 @@ class _MultiImageGameWordSelectorState
                     progress: false,
                     borderThickness: 8,
                     onTap: (_) {
-                      wordController.text += currentWord[idx];
+                      if (wordController.text.length < currentWord.length) {
+                        wordController.text += currentWord[idx];
+                      }
                     },
                     child: Text(
                       currentWord[idx],

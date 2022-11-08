@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -14,12 +13,11 @@ class BlurImageViewer extends ConsumerStatefulWidget {
 }
 
 class _BlurImageViewerState extends ConsumerState<BlurImageViewer> {
-  int getRandomIdx() {
-    return Random().nextInt(4);
-  }
 
   @override
   Widget build(BuildContext context) {
+    var blurImgPvdWatcher = ref.watch(blurImageGameProvider);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -27,9 +25,9 @@ class _BlurImageViewerState extends ConsumerState<BlurImageViewer> {
           image: DecorationImage(
             image: NetworkImage(
               ref
-                  .read(multiImageGameProvider)
+                  .read(blurImageGameProvider)
                   .currentWordData
-                  .results[getRandomIdx()]
+                  .results.first
                   .urls
                   .raw,
             ),
@@ -37,7 +35,10 @@ class _BlurImageViewerState extends ConsumerState<BlurImageViewer> {
           ),
         ),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+          filter: ImageFilter.blur(
+            sigmaX: blurImgPvdWatcher.blurImageCounter,
+            sigmaY: blurImgPvdWatcher.blurImageCounter,
+          ),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.0),

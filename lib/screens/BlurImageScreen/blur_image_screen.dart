@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:picture_game/screens/BlurImageScreen/blur_image_game_word_selector.dart';
 import 'package:picture_game/screens/BlurImageScreen/blur_image_viewer.dart';
-import 'package:picture_game/screens/MultiImageGameScreen/multi_image_game_word_selector.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../providers/global_providers.dart';
@@ -19,7 +18,7 @@ class _BlurImageScreenState extends ConsumerState<BlurImageScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(multiImageGameProvider).generateNewWordForGame(
+    ref.read(blurImageGameProvider).generateNewWordForGame(
           ref.read(pictureDataProvider).firebaseDataSnapShot,
         );
   }
@@ -31,11 +30,11 @@ class _BlurImageScreenState extends ConsumerState<BlurImageScreen> {
         children: [
           SizedBox(
             height: 60.h,
-            child: BlurImageViewer(),
+            child: const BlurImageViewer(),
           ),
           SizedBox(
             height: 40.h,
-            child: BlurImageGameWordSelector(),
+            child: const BlurImageGameWordSelector(),
           ),
         ],
       ),
