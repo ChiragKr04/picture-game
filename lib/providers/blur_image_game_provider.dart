@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:developer' as d;
 
@@ -9,6 +10,7 @@ class BlurImageGameProvider extends ChangeNotifier {
   FirebaseModel currentWordData = FirebaseModel.empty();
   List<String> currentWordList = [];
   double blurImageCounter = 20;
+  int timeLeft = 2000;
 
   BlurImageGameProvider() {
     FlirebaseServiceImpl().fetchWordsData();
@@ -34,5 +36,21 @@ class BlurImageGameProvider extends ChangeNotifier {
     }
     notifyListeners();
     return false;
+  }
+
+  void startTimer() {
+    timeLeft = 2000;
+    d.log("timer running");
+    Timer.periodic(
+      const Duration(microseconds: 1),
+      (timer) {
+        if (timeLeft < 0) {
+          d.log("time not left");
+          timer.cancel();
+        }
+        timeLeft--;
+        notifyListeners();
+      },
+    );
   }
 }

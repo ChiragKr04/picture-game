@@ -12,6 +12,7 @@ class MainPage extends ConsumerWidget {
     // var screenSwitcherPvdReader = ref.read(screenSwitcherProvider);
     var screenSwitcherPvdWatcher = ref.watch(screenSwitcherProvider);
     return Scaffold(
+      backgroundColor: ThemeData.dark().backgroundColor,
       appBar: AppBar(
         title: Text(screenSwitcherPvdWatcher.pageName),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:picture_game/screens/BlurImageScreen/blur_game_timer.dart';
 import 'package:picture_game/screens/BlurImageScreen/blur_image_game_word_selector.dart';
 import 'package:picture_game/screens/BlurImageScreen/blur_image_viewer.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -26,16 +27,21 @@ class _BlurImageScreenState extends ConsumerState<BlurImageScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
+      child: Stack(
         children: [
-          SizedBox(
-            height: 60.h,
-            child: const BlurImageViewer(),
+          Column(
+            children: [
+              SizedBox(
+                height: 60.h,
+                child: const BlurImageViewer(),
+              ),
+              SizedBox(
+                height: 40.h,
+                child: const BlurImageGameWordSelector(),
+              ),
+            ],
           ),
-          SizedBox(
-            height: 40.h,
-            child: const BlurImageGameWordSelector(),
-          ),
+          const BlurTimerWidget(),
         ],
       ),
     );

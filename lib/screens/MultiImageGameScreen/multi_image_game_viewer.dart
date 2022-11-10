@@ -5,11 +5,18 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../models/firebase_model.dart';
 
-class MultiGameImageViewer extends ConsumerWidget {
+class MultiGameImageViewer extends ConsumerStatefulWidget {
   const MultiGameImageViewer({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _MultiGameImageViewerState();
+}
+
+class _MultiGameImageViewerState extends ConsumerState<MultiGameImageViewer> {
+  bool isTimerStarted = false;
+  @override
+  Widget build(BuildContext context) {
     FirebaseModel wordData = ref.read(multiImageGameProvider).currentWordData;
     return SizedBox(
       height: 60.h,
@@ -29,6 +36,23 @@ class MultiGameImageViewer extends ConsumerWidget {
                 child: Image.network(
                   wordData.results[index].urls.raw,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      if (!isTimerStarted) {
+                        ref.read(blurImageGameProvider).startTimer();
+                        isTimerStarted = true;
+                      }
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
