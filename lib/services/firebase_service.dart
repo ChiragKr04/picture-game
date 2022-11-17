@@ -31,7 +31,6 @@ class FlirebaseServiceImpl extends FirebaseService {
     List<FirebaseModel> fetchedData = [];
     await _wordDbRef.get().then((value) {
       for (var doc in value.docs) {
-        log(doc["word"]);
         fetchedData.add(
           FirebaseModel(
             word: doc["word"].toString(),

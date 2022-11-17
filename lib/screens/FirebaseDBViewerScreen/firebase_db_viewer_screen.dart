@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:picture_game/constants/constant_utility.dart';
 import 'package:picture_game/models/firebase_model.dart';
+import 'package:picture_game/providers/global_providers.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class FirebaseDBViewerScreen extends ConsumerStatefulWidget {
@@ -27,11 +26,11 @@ class _FirebaseDBViewerScreenState
       stream: _usersStream,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return const Text('Something went wrong');
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          return const Text("Loading");
         }
 
         List<FirebaseModel> firebaseData = snapshot.data!.docs.map(
@@ -41,6 +40,8 @@ class _FirebaseDBViewerScreenState
             );
           },
         ).toList();
+
+        ref.read(pictureDataProvider).updateNewFirebaseDb(firebaseData);
 
         return ImageListViewBuilder(
           firebaseDBData: firebaseData,

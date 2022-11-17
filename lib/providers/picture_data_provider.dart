@@ -15,6 +15,8 @@ class PictureDataProvider extends ChangeNotifier {
   List<Result> selectedPictures = [];
   String currentWord = '';
 
+  List<FirebaseModel> firebaseDataSnapShot = [];
+
   void getSearchedWordData({
     required String word,
   }) async {
@@ -85,5 +87,10 @@ class PictureDataProvider extends ChangeNotifier {
     }
     log("length ${selectedPictures.length} ${selectedPictures.toString()}");
     notifyListeners();
+  }
+
+  void updateNewFirebaseDb(List<FirebaseModel> firebaseData) {
+    firebaseDataSnapShot = firebaseData;
+    // notifyListeners();
   }
 }

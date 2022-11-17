@@ -31,6 +31,8 @@ class FirebaseModel {
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
       );
 
+  factory FirebaseModel.empty() => FirebaseModel(word: "", results: []);
+
   Map<String, dynamic> toJson() => {
         "word": word,
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
