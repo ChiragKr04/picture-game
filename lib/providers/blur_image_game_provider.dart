@@ -11,6 +11,7 @@ class BlurImageGameProvider extends ChangeNotifier {
   List<String> currentWordList = [];
   double blurImageCounter = 20;
   int timeLeft = 2000;
+  bool showScore = false;
 
   BlurImageGameProvider() {
     FlirebaseServiceImpl().fetchWordsData();
@@ -36,6 +37,16 @@ class BlurImageGameProvider extends ChangeNotifier {
     }
     notifyListeners();
     return false;
+  }
+
+  void changeShowScore() {
+    showScore = true;
+    notifyListeners();
+  }
+
+  void resetShowScore() {
+    showScore = false;
+    notifyListeners();
   }
 
   void startTimer() {

@@ -11,7 +11,9 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../widgets/custom_word_button.dart';
 
 class BlurImageGameWordSelector extends ConsumerStatefulWidget {
-  const BlurImageGameWordSelector({super.key});
+  const BlurImageGameWordSelector({super.key, required this.callback});
+
+  final Function callback;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -38,6 +40,7 @@ class _MultiImageGameWordSelectorState
           .checkIfSpellingCorrect(wordController.text);
       log("${wordController.text} $isSpellCorrect");
       showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -47,6 +50,7 @@ class _MultiImageGameWordSelectorState
             actions: [
               ElevatedButton(
                 onPressed: () {
+                  widget.callback();
                   Navigator.pop(context);
                 },
                 child: const Text(
@@ -93,6 +97,8 @@ class _MultiImageGameWordSelectorState
         SizedBox(
           width: 60.w,
           child: NiceButtons(
+            startColor: Colors.pink.shade400,
+            endColor: Colors.pink.shade400,
             child: const Icon(Icons.backspace_rounded),
             onTap: (p0) {
               backspaceButtonFn();
@@ -110,6 +116,8 @@ class _MultiImageGameWordSelectorState
                   child: NiceButtons(
                     progress: false,
                     borderThickness: 8,
+                    startColor: Colors.pink.shade400,
+                    endColor: Colors.pink.shade400,
                     onTap: (_) {
                       if (wordController.text.length < currentWord.length) {
                         wordController.text += currentWord[idx];
@@ -117,6 +125,10 @@ class _MultiImageGameWordSelectorState
                     },
                     child: Text(
                       currentWord[idx],
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
