@@ -9,8 +9,8 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../widgets/custom_word_button.dart';
 
 class MultiImageGameWordSelector extends ConsumerStatefulWidget {
-  const MultiImageGameWordSelector({super.key});
-
+  const MultiImageGameWordSelector({super.key, required this.callback});
+  final Function callback;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _MultiImageGameWordSelectorState();
@@ -18,8 +18,9 @@ class MultiImageGameWordSelector extends ConsumerStatefulWidget {
 
 class _MultiImageGameWordSelectorState
     extends ConsumerState<MultiImageGameWordSelector> {
-  TextEditingController wordController = TextEditingController();
+  // TextEditingController wordController = TextEditingController();
   List<String> currentWord = [];
+  List<String> gameWord = [];
   @override
   void initState() {
     super.initState();
@@ -27,14 +28,15 @@ class _MultiImageGameWordSelectorState
   }
 
   void wordListener() {
-    wordController.addListener(() {
-      if (wordController.text.length != currentWord.length) {
-        return;
-      }
-      bool isSpellCorrect = ref
-          .read(multiImageGameProvider)
-          .checkIfSpellingCorrect(wordController.text);
-      log("${wordController.text} $isSpellCorrect");
+    // if (wordController.text.length != currentWord.length) {
+    //   return;
+    // }
+    bool isSpellCorrect = ref
+        .read(multiImageGameProvider)
+        .checkIfSpellingCorrect(gameWord.join(""));
+    log("${gameWord.toString()} $isSpellCorrect");
+    if (gameWord.length ==
+        ref.read(multiImageGameProvider).currentWordList.length) {
       showDialog(
         context: context,
         builder: (context) {
@@ -44,9 +46,17 @@ class _MultiImageGameWordSelectorState
             ),
             actions: [
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: isSpellCorrect
+                    ? () {
+                        widget.callback();
+                        // currentWord =
+                        //     ref.read(multiImageGameProvider).currentWordList;
+                        gameWord = [];
+                        Navigator.pop(context);
+                      }
+                    : () {
+                        Navigator.pop(context);
+                      },
                 child: const Text(
                   "Ok",
                 ),
@@ -55,43 +65,44 @@ class _MultiImageGameWordSelectorState
           );
         },
       );
-    });
+    }
   }
 
   void backspaceButtonFn() {
-    if (wordController.text.isNotEmpty) {
-      var newText = wordController.text.split("");
-      newText.removeLast();
-      wordController.text = newText.join("");
-    }
+    gameWord.removeLast();
+    // if (wordController.text.isNotEmpty) {
+    //   var newText = wordController.text.split("");
+    //   newText.removeLast();
+    //   wordController.text = newText.join("");
+    // }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    wordListener();
     return Column(
       children: [
         SizedBox(
-          width: 60.w,
-          child: PinCodeTextField(
-            controller: wordController,
-            appContext: context,
-            length: currentWord.length,
-            pinTheme: PinTheme.defaults(
-              borderWidth: 2,
-              borderRadius: BorderRadius.circular(5),
-              shape: PinCodeFieldShape.box,
-              activeColor: Colors.green,
-              disabledColor: Colors.white,
-            ),
-            enabled: false,
-            onChanged: (value) {},
-            onCompleted: (value) {},
+          height: 7.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (int i = 0; i < gameWord.length; i++)
+                Text(
+                  gameWord[i].toString(),
+                  style: const TextStyle(
+                    fontSize: 30,
+                    color: Colors.pink,
+                  ),
+                ),
+            ],
           ),
         ),
         SizedBox(
           width: 60.w,
           child: NiceButtons(
+            startColor: Colors.pink.shade300,
+            endColor: Colors.pink.shade300,
             child: const Icon(Icons.backspace_rounded),
             onTap: (p0) {
               backspaceButtonFn();
@@ -101,19 +112,33 @@ class _MultiImageGameWordSelectorState
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (int idx = 0; idx < currentWord.length; idx++)
+            for (int idx = 0;
+                idx < ref.read(multiImageGameProvider).currentWordList.length;
+                idx++)
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: SizedBox(
                   width: 50,
                   child: NiceButtons(
+                    startColor: Colors.pink.shade300,
+                    endColor: Colors.pink.shade300,
                     progress: false,
                     borderThickness: 8,
                     onTap: (_) {
-                      wordController.text += currentWord[idx];
+                      gameWord.add(ref
+                          .read(multiImageGameProvider)
+                          .currentWordList[idx]);
+                      // wordController.text +=
+                      //     ref.read(multiImageGameProvider).currentWordList[idx];
+                      wordListener();
+                      setState(() {});
                     },
                     child: Text(
-                      currentWord[idx],
+                      ref.watch(multiImageGameProvider).currentWordList[idx],
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

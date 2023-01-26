@@ -8,6 +8,7 @@ import 'package:picture_game/services/firebase_service.dart';
 class MultiImageGameProvider extends ChangeNotifier {
   FirebaseModel currentWordData = FirebaseModel.empty();
   List<String> currentWordList = [];
+  int score = 0;
 
   MultiImageGameProvider() {
     FlirebaseServiceImpl().fetchWordsData();
@@ -27,5 +28,16 @@ class MultiImageGameProvider extends ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  void increaseScore(List<FirebaseModel> firebaseDataSnapShot) {
+    score++;
+    generateNewWordForGame(firebaseDataSnapShot);
+    notifyListeners();
+  }
+
+  void resetScore() {
+    score = 0;
+    notifyListeners();
   }
 }

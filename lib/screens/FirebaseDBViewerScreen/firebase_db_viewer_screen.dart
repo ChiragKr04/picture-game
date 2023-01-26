@@ -83,73 +83,128 @@ class ImageListViewBuilderState extends ConsumerState<ImageListViewBuilder> {
   @override
   Widget build(BuildContext context) {
     var firebaseData = widget.firebaseDBData;
+    Size size = MediaQuery.of(context).size;
     return ListView.builder(
       itemCount: firebaseData.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Material(
-            elevation: 10,
-            borderRadius: BorderRadius.circular(20),
-            color: ConstantUtility.fromHexToColor(
-              hexCode: firebaseData[index].results.first.color,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(firebaseData[index].word.toUpperCase()),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            showPics[index] = !showPics[index];
-                          });
-                        },
-                        child: Text(
-                          changeButtonText(showPics[index]),
-                        ),
+          child: SizedBox(
+            height: showPics[index] ? 55.h : null,
+            child: Material(
+              elevation: 10,
+              borderRadius: BorderRadius.circular(20),
+              color: ConstantUtility.fromHexToColor(
+                hexCode: firebaseData[index].results.first.color,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      firebaseData[index].word.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 25,
                       ),
-                      !showPics[index]
-                          ? const Offstage()
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                for (int i = 0;
-                                    i < firebaseData[index].results.length;
-                                    i++)
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: CachedNetworkImage(
-                                        imageUrl: firebaseData[index]
-                                            .results[i]
-                                            .urls
-                                            .raw,
-                                        height: 10.h,
-                                        width: 10.w,
-                                        fit: BoxFit.fill,
-                                        placeholder: (context, url) =>
-                                            const Center(
-                                                child:
-                                                    CircularProgressIndicator()),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.warning_rounded),
-                                      ),
-                                    ),
-                                  )
-                              ],
-                            ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              showPics[index] = !showPics[index];
+                            });
+                          },
+                          style: const ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                            Colors.pink,
+                          )),
+                          child: Text(
+                            changeButtonText(showPics[index]),
+                          ),
+                        ),
+                        !showPics[index]
+                            ? const Offstage()
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        for (int i = 0; i < 2; i++)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: CachedNetworkImage(
+                                                imageUrl: firebaseData[index]
+                                                    .results[i]
+                                                    .urls
+                                                    .raw,
+                                                width: 40.w,
+                                                height: 20.h,
+                                                fit: BoxFit.fill,
+                                                placeholder: (context, url) =>
+                                                    const Center(
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    const Icon(
+                                                        Icons.warning_rounded),
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        for (int i = 2; i < 4; i++)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 8.0),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: CachedNetworkImage(
+                                                imageUrl: firebaseData[index]
+                                                    .results[i]
+                                                    .urls
+                                                    .raw,
+                                                height: 20.h,
+                                                width: 40.w,
+                                                fit: BoxFit.fill,
+                                                placeholder: (context, url) =>
+                                                    const Center(
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                errorWidget: (context, url,
+                                                        error) =>
+                                                    const Icon(
+                                                        Icons.warning_rounded),
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
