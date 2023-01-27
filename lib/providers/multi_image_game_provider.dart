@@ -9,6 +9,7 @@ class MultiImageGameProvider extends ChangeNotifier {
   FirebaseModel currentWordData = FirebaseModel.empty();
   List<String> currentWordList = [];
   int score = 0;
+  bool showScore = false;
 
   MultiImageGameProvider() {
     FlirebaseServiceImpl().fetchWordsData();
@@ -28,6 +29,11 @@ class MultiImageGameProvider extends ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  void toggleScore(bool value) {
+    showScore = value;
+    notifyListeners();
   }
 
   void increaseScore(List<FirebaseModel> firebaseDataSnapShot) {

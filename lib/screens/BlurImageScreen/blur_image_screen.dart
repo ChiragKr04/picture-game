@@ -55,7 +55,7 @@ class _BlurImageScreenState extends ConsumerState<BlurImageScreen> {
               ),
             ],
           ),
-          const BlurTimerWidget(),
+          BlurTimerWidget(),
         ],
       ),
     );
