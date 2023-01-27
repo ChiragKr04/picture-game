@@ -6,15 +6,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/global_providers.dart';
 
 class BlurTimerWidget extends ConsumerWidget {
-  const BlurTimerWidget({
+  BlurTimerWidget({
     Key? key,
+    this.callback,
   }) : super(key: key);
+
+  final Function? callback;
+  int x = 0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String timeLeft = ref.watch(blurImageGameProvider).timeLeft.toString();
     String timeLeftToShow =
         (ref.watch(blurImageGameProvider).timeLeft ~/ 100).toString();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (x == 0 && int.parse(timeLeftToShow) <= 0) {
+        log("HELOOOO");
+        if (callback != null) {
+          callback!();
+        }
+        x = 1;
+      }
+    });
 
     return Padding(
       padding: const EdgeInsets.all(8.0),

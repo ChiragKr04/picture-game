@@ -63,115 +63,167 @@ class AllGamePage extends ConsumerWidget {
         ref.read(pictureDataProvider).updateNewFirebaseDb(firebaseData);
 
         return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Stack(
             children: [
-              ref.watch(screenSwitcherProvider).isUserAdmin
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        for (int i = 0; i < 2; i++)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: SizedBox(
-                              height: 40.h,
-                              width: 40.w,
-                              child: InkWell(
-                                onTap: () {
-                                  if (i == 0) {
-                                    // ref
-                                    //     .read(screenSwitcherProvider)
-                                    //     .changeScreen(pageIdx: 1);
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ref.watch(screenSwitcherProvider).isUserAdmin
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            for (int i = 0; i < 2; i++)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: SizedBox(
+                                  height: 40.h,
+                                  width: 40.w,
+                                  child: InkWell(
+                                    onTap: () {
+                                      if (i == 0) {
+                                        // ref
+                                        //     .read(screenSwitcherProvider)
+                                        //     .changeScreen(pageIdx: 1);
 
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              getScaffold(AdminScreen(), l1[i]),
-                                        ));
-                                  } else {
-                                    // ref
-                                    //     .read(screenSwitcherProvider)
-                                    //     .changeScreen(pageIdx: 2);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => getScaffold(
-                                                FirebaseDBViewerScreen(),
-                                                l1[i])));
-                                  }
-                                },
-                                child: Material(
-                                  color: Colors.pink.shade400,
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Center(
-                                    child: Text(
-                                      l1[i],
-                                      style: const TextStyle(
-                                        fontSize: 40,
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => getScaffold(
+                                                  AdminScreen(), l1[i]),
+                                            ));
+                                      } else {
+                                        // ref
+                                        //     .read(screenSwitcherProvider)
+                                        //     .changeScreen(pageIdx: 2);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    getScaffold(
+                                                        FirebaseDBViewerScreen(),
+                                                        l1[i])));
+                                      }
+                                    },
+                                    child: Material(
+                                      color: Colors.pink.shade400,
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Center(
+                                        child: Text(
+                                          l1[i],
+                                          style: const TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                      ],
-                    )
-                  : const Offstage(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (int i = 0; i < 2; i++)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: SizedBox(
-                        height: 40.h,
-                        width: 40.w,
-                        child: InkWell(
-                          onTap: () async {
-                            if (i == 0) {
-                              // ref
-                              //     .read(screenSwitcherProvider)
-                              //     .changeScreen(pageIdx: 3);
-                              ref.watch(multiImageGameProvider).resetScore();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        getScaffold(
-                                            MultiImageGameScreen(), l2[i]),
-                                  ));
-                            } else {
-                              // ref
-                              //     .read(screenSwitcherProvider)
-                              //     .changeScreen(pageIdx: 4);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        getScaffold(BlurImageScreen(), l2[i]),
-                                  ));
-                            }
-                          },
-                          child: Material(
-                            color: Colors.pink.shade400,
-                            borderRadius: BorderRadius.circular(10),
-                            child: Center(
-                              child: Text(
-                                l2[i],
-                                style: const TextStyle(
-                                  fontSize: 40,
+                          ],
+                        )
+                      : const Offstage(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (int i = 0; i < 2; i++)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: SizedBox(
+                            height: 40.h,
+                            width: 40.w,
+                            child: InkWell(
+                              onTap: () async {
+                                if (i == 0) {
+                                  // ref
+                                  //     .read(screenSwitcherProvider)
+                                  //     .changeScreen(pageIdx: 3);
+                                  ref.read(multiImageGameProvider).resetScore();
+                                  ref
+                                      .read(multiImageGameProvider)
+                                      .toggleScore(true);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            getScaffold(
+                                                MultiImageGameScreen(), l2[i]),
+                                      ));
+                                } else {
+                                  // ref
+                                  //     .read(screenSwitcherProvider)
+                                  //     .changeScreen(pageIdx: 4);
+                                  ref
+                                      .read(multiImageGameProvider)
+                                      .toggleScore(true);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => getScaffold(
+                                            BlurImageScreen(), l2[i]),
+                                      ));
+                                }
+                              },
+                              child: Material(
+                                color: Colors.pink.shade400,
+                                borderRadius: BorderRadius.circular(10),
+                                child: Center(
+                                  child: Text(
+                                    l2[i],
+                                    style: const TextStyle(
+                                      fontSize: 40,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                    ],
+                  ),
                 ],
               ),
+              ref.watch(multiImageGameProvider).showScore
+                  ? Center(
+                      child: SizedBox(
+                        height: 20.h,
+                        width: 60.w,
+                        child: Material(
+                          elevation: 20,
+                          color: Colors.pink.shade900,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Your Score was ${ref.read(multiImageGameProvider).score}",
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                    ConstantColors.blueColor,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  ref
+                                      .read(multiImageGameProvider)
+                                      .toggleScore(false);
+                                },
+                                child: Text(
+                                  "Ok",
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : const Offstage(),
             ],
           ),
         );

@@ -38,7 +38,12 @@ class _MultiImageGameScreenState extends ConsumerState<MultiImageGameScreen> {
               fontSize: 30,
             ),
           ),
-          BlurTimerWidget(),
+          BlurTimerWidget(
+            callback: () {
+              log("HERERER");
+              Navigator.pop(context);
+            },
+          ),
           MultiGameImageViewer(),
         ],
       ),
